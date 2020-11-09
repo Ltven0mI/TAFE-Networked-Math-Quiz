@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CommonClasses</name>
+    </assembly>
+    <members>
+        <member name="T:CommonClasses.MathQuestion">
+            <summary>
+            A class to represent a math question.<br/>
+            e.g. "10 * 4 = 40".
+            </summary>
+        </member>
+        <member name="M:CommonClasses.MathQuestion.CalculateAnswer">
+            <summary>
+            Calculates the answer to this <see cref="T:CommonClasses.MathQuestion"/> instance.
+            </summary>
+            <returns>The calculated answer.</returns>
+            <exception cref="T:System.NotImplementedException">when an unknown <see cref="T:CommonClasses.MathQuestion.MathOperator"/> is used.</exception>
+        </member>
+        <member name="M:CommonClasses.MathQuestion.CompareTo(CommonClasses.MathQuestion)">
+            <summary>
+            Compares this instance and <paramref name="other"/> numerically
+            by their <c>Answer</c> properties.
+            </summary>
+            <param name="other">The <see cref="T:CommonClasses.MathQuestion"/> to compare against.</param>
+            <returns>
+            <c>0</c> if both instances' <c>Answer</c> properties are equal.<br/>
+            <c>-1</c> if this instance's <c>Answer</c> is less than
+            the <c>Answer</c> property of <paramref name="other"/>.<br/>
+            <c>1</c> if this instance's <c>Answer</c> is greater than
+            the <c>Answer</c> property of <paramref name="other"/>.
+            </returns>
+        </member>
+        <member name="M:CommonClasses.MathQuestion.ToString">
+            <summary>
+            Gets the string representation of this instance.<br/>
+            e.g. "40(10 * 4)".
+            </summary>
+            <returns>The string representation.</returns>
+        </member>
+        <member name="T:CommonClasses.Networking.AnswerPacket">
+            <summary>
+            Provides a serializable class for sending a math answer across a network.
+            </summary>
+        </member>
+        <member name="T:CommonClasses.Networking.InvalidHeaderException">
+            <summary>
+            Represents errors that occur during deserialization of SPackets.
+            </summary>
+        </member>
+        <member name="M:CommonClasses.Networking.InvalidHeaderException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CommonClasses.Networking.InvalidHeaderException"/> class.
+            </summary>
+        </member>
+        <member name="M:CommonClasses.Networking.InvalidHeaderException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CommonClasses.Networking.InvalidHeaderException"/> class
+            with a specified error message.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:CommonClasses.Networking.InvalidHeaderException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CommonClasses.Networking.InvalidHeaderException"/> class
+            with a specified error message and a reference to the inner exception
+            that is the cause of this exception.
+            </summary>
+            <param name="message"></param>
+            <param name="inner"></param>
+        </member>
+        <member name="T:CommonClasses.Networking.ISPacket">
+            <summary>
+            Represents an interface for a serializable structured packet.
+            </summary>
+        </member>
+        <member name="M:CommonClasses.Networking.ISPacket.GetTypeID">
+            <summary>
+            When implemented in a concrete class, it should get
+            the TypeID the implementing class is registered with
+            in <see cref="T:CommonClasses.Networking.SPacketRegister"/>.
+            </summary>
+            <returns>The TypeID this class is registered with.</returns>
+        </member>
+        <member name="M:CommonClasses.Networking.ISPacket.CalculateDataSize">
+            <summary>
+            When implemented in a concrete class, it should calculate
+            the number of bytes required to store this instance's
+            data when serialized.
+            </summary>
+            <returns>The number of bytes to store this instance's serialized data.</returns>
+        </member>
+        <member name="M:CommonClasses.Networking.ISPacket.Serialize">
+            <summary>
+            When implemented in a concrete class, it should serialize
+            this instance's data into an array of bytes.
+            </summary>
+            <returns>This instance's data serialized into a <c>byte[]</c>.</returns>
+        </member>
+        <member name="M:CommonClasses.Networking.ISPacket.Deserialize(System.Byte[])">
+            <summary>
+            When implemented in a concrete class, it should deserialize
+            the data and populate this instance.
+            </summary>
+            <param name="data">The data to deserialize.</param>
+        </member>
+        <member name="T:CommonClasses.Networking.QuestionPacket">
+            <summary>
+            Provides a serializable class for sending a math question across a network.
+            </summary>
+        </member>
+        <member name="T:CommonClasses.Networking.ResultPacket">
+            <summary>
+            Provides a serializable class for sending a QnA result across a network.
+            </summary>
+        </member>
+        <member name="T:CommonClasses.Networking.SPacketBase">
+            <summary>
+            Provides an abstract implementation of the <see cref="T:CommonClasses.Networking.ISPacket"/> interface,
+            with additional helper methods.
+            </summary>
+        </member>
+        <member name="M:CommonClasses.Networking.SPacketBase.CreateDataArray">
+            <summary>
+            Creates a new <c>byte[]</c> large enough to store the
+            packet's Header and Data content.
+            </summary>
+            <returns>The new <c>byte[]</c>.</returns>
+        </member>
+        <member name="M:CommonClasses.Networking.SPacketBase.SerializeHeader(System.Byte[],System.Int32@)">
+            <summary>
+            Serializes the packet's Header content to <paramref name="array"/>
+            and advances <paramref name="offset"/> accordingly.
+            </summary>
+            <param name="array">The destination array.</param>
+            <param name="offset">The current serialization position in the array.</param>
+        </member>
+        <member name="M:CommonClasses.Networking.SPacketBase.ValidateToken(System.Byte[],System.Int32@,System.Byte[]@)">
+            <summary>
+            Validates whether <paramref name="array"/> contains a valid
+            Header Token, then advances <paramref name="offset"/>.
+            </summary>
+            <param name="array">An array containing the serialized packet.</param>
+            <param name="offset">The current deserialization position in the array.</param>
+            <param name="token">The token pulled from <paramref name="array"/>.</param>
+            <returns><c>true</c> if a valid Header Token is found, otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:CommonClasses.Networking.SPacketBase.ValidateVersion(System.Byte[],System.Int32@,System.Byte@,System.Byte@,System.Byte@)">
+            <summary>
+            Validates whether <paramref name="array"/> contains a valid and compatable Header Version.
+            </summary>
+            <param name="array">An array containing the serialized packet.</param>
+            <param name="offset">The current deserialization position in the array.</param>
+            <param name="major">The Major version number pulled from <paramref name="array"/>.</param>
+            <param name="minor">The Minor version number pulled from <paramref name="array"/>.</param>
+            <param name="patch">The Patch version number pulled from <paramref name="array"/>.</param>
+            <returns><c>true</c> if a compatable version was found, otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:CommonClasses.Networking.SPacketBase.ValidateTypeID(System.Byte[],System.Int32@,System.Int32@,System.Type@)">
+            <summary>
+            Validates whether <paramref name="array"/> contains a valid SPacket TypeID.
+            </summary>
+            <param name="array">An array containing the serialized packet.</param>
+            <param name="offset">The current deserialization position in the array.</param>
+            <param name="typeID">The TypeID pulled from <paramref name="array"/>.</param>
+            <param name="type">The <see cref="T:System.Type"/> registered in <see cref="T:CommonClasses.Networking.SPacketRegister"/> with <paramref name="typeID"/>.</param>
+            <returns><c>true</c> if a valid TypeID was found, otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:CommonClasses.Networking.SPacketBase.ValidateHeader(System.Byte[])">
+            <summary>
+            Deserializes and validates the SPacket Header from <paramref name="bytes"/>,
+            then returns the Type of the SPacket.
+            </summary>
+            <param name="bytes">The serialized SPacket</param>
+            <returns>The <see cref="T:System.Type"/> of the SPacket stored in <paramref name="bytes"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">when <paramref name="bytes"/> is <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentException">when <paramref name="bytes"/> is too small to contain a valid Header.</exception>
+            <exception cref="T:CommonClasses.Networking.InvalidHeaderException">
+            when any of the following conditions apply,<br/>
+            - The Header Token is invalid,<br/>
+            - The Header Version is invalid or incompatable, or<br/>
+            - The Header TypeID is invalid or unknown.
+            </exception>
+        </member>
+        <member name="T:CommonClasses.Networking.SPacketRegister">
+            <summary>
+            Provides a centralized collection of manually curated SPacket classes.
+            </summary>
+        </member>
+        <member name="T:CommonClasses.Utilities.BinarySerialize">
+            <summary>
+            Provides static methods for serilaizing / deserializing
+            data types to byte arrays.
+            </summary>
+        </member>
+        <member name="M:CommonClasses.Utilities.BinarySerialize.SerializeDouble(System.Double,System.Byte[],System.Int32@)">
+            <summary>
+            Serialize a <c>double</c>, place it into <paramref name="array"/> at
+            <paramref name="offset"/> and advance <paramref name="offset"/> by
+            <c>sizeof(double)</c>
+            </summary>
+            <param name="val">The value to serialize.</param>
+            <param name="array">The array to put the serialized value in.</param>
+            <param name="offset">The position to start putting the bytes in the array.</param>
+        </member>
+        <member name="M:CommonClasses.Utilities.BinarySerialize.DeserializeDouble(System.Byte[],System.Int32@)">
+            <summary>
+            Deserializes a <c>double</c> from <paramref name="array"/> at the index
+            <paramref name="offset"/> and advances <paramref name="offset"/> by
+            <c>sizeof(double)</c>.
+            </summary>
+            <param name="array">The array of bytes, containing the serialized value.</param>
+            <param name="offset">The first index of the value.</param>
+            <returns>The deserialized value.</returns>
+        </member>
+        <member name="M:CommonClasses.Utilities.BinarySerialize.SerializeInt(System.Int32,System.Byte[],System.Int32@)">
+            <summary>
+            Serialize an <c>int</c>, place it into <paramref name="array"/> at
+            <paramref name="offset"/> and advance <paramref name="offset"/> by
+            <c>sizeof(int)</c>
+            </summary>
+            <param name="val">The value to serialize.</param>
+            <param name="array">The array to put the serialized value in.</param>
+            <param name="offset">The position to start putting the bytes in the array.</param>
+        </member>
+        <member name="M:CommonClasses.Utilities.BinarySerialize.DeserializeInt(System.Byte[],System.Int32@)">
+            <summary>
+            Deserializes an <c>int</c> from <paramref name="array"/> at the index
+            <paramref name="offset"/> and advances <paramref name="offset"/> by
+            <c>sizeof(int)</c>.
+            </summary>
+            <param name="array">The array of bytes, containing the serialized value.</param>
+            <param name="offset">The first index of the value.</param>
+            <returns>The deserialized value.</returns>
+        </member>
+        <member name="M:CommonClasses.Utilities.BinarySerialize.SerializeBool(System.Boolean,System.Byte[],System.Int32@)">
+            <summary>
+            Serialize a <c>bool</c>, place it into <paramref name="array"/> at
+            <paramref name="offset"/> and advance <paramref name="offset"/> by
+            <c>sizeof(bool)</c>
+            </summary>
+            <param name="val">The value to serialize.</param>
+            <param name="array">The array to put the serialized value in.</param>
+            <param name="offset">The position to start putting the bytes in the array.</param>
+        </member>
+        <member name="M:CommonClasses.Utilities.BinarySerialize.DeserializeBool(System.Byte[],System.Int32@)">
+            <summary>
+            Deserializes a <c>bool</c> from <paramref name="array"/> at the index
+            <paramref name="offset"/> and advances <paramref name="offset"/> by
+            <c>sizeof(bool)</c>.
+            </summary>
+            <param name="array">The array of bytes, containing the serialized value.</param>
+            <param name="offset">The first index of the value.</param>
+            <returns>The deserialized value.</returns>
+        </member>
+        <member name="M:CommonClasses.Utilities.BinarySerialize.SerializeByte(System.Byte,System.Byte[],System.Int32@)">
+            <summary>
+            Serialize a <c>byte</c>, place it into <paramref name="array"/> at
+            <paramref name="offset"/> and advance <paramref name="offset"/> by
+            <c>sizeof(byte)</c>
+            </summary>
+            <param name="val">The value to serialize.</param>
+            <param name="array">The array to put the serialized value in.</param>
+            <param name="offset">The position to start putting the bytes in the array.</param>
+        </member>
+        <member name="M:CommonClasses.Utilities.BinarySerialize.DeserializeByte(System.Byte[],System.Int32@)">
+            <summary>
+            Deserializes a <c>byte</c> from <paramref name="array"/> at the index
+            <paramref name="offset"/> and advances <paramref name="offset"/> by
+            <c>sizeof(byte)</c>.
+            </summary>
+            <param name="array">The array of bytes, containing the serialized value.</param>
+            <param name="offset">The first index of the value.</param>
+            <returns>The deserialized value.</returns>
+        </member>
+        <member name="M:CommonClasses.Utilities.BinarySerialize.SerializeByteArray(System.Byte[],System.Byte[],System.Int32@)">
+            <summary>
+            Serialize a <c>byte[]</c>, place it into <paramref name="array"/> at
+            <paramref name="offset"/> and advance <paramref name="offset"/> by
+            <c>sizeof(int)</c> and <c>val.Length</c>.
+            </summary>
+            <param name="val">The value to serialize.</param>
+            <param name="array">The array to put the serialized value in.</param>
+            <param name="offset">The position to start putting the bytes in the array.</param>
+        </member>
+        <member name="M:CommonClasses.Utilities.BinarySerialize.DeserializeByteArray(System.Byte[],System.Int32@)">
+            <summary>
+            Deserializes a <c>byte[]</c> from <paramref name="array"/> at the index
+            <paramref name="offset"/> and advances <paramref name="offset"/> by
+            <c>sizeof(int)</c> and the length of the deserialized array.
+            </summary>
+            <param name="array">The array of bytes, containing the serialized value.</param>
+            <param name="offset">The first index of the value.</param>
+            <returns>The deserialized value.</returns>
+        </member>
+    </members>
+</doc>
