@@ -5,8 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudentApp.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Student" Height="420" Width="430" Background="#FFF0F0F0" ResizeMode="NoResize">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="66" />
+            <RowDefinition />
+            <RowDefinition Height="80" />
+        </Grid.RowDefinitions>
 
+        <!-- Header -->
+        <Border Background="RoyalBlue" VerticalAlignment="Top" Height="50" Margin="12,8,12,0">
+            <TextBlock Text="Student" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="32" />
+        </Border>
+
+        <!-- Input Group -->
+        <Grid Grid.Row="1" Margin="12,20,12,0">
+            <!-- Group Border -->
+            <Border BorderThickness="1" BorderBrush="#FFE2E2E2" />
+            <!-- Group Header -->
+            <Label Content="Enter your answer and click SUBMIT" Padding="4,0,4,0" Margin="6,-9,0,0" Background="#FFF0F0F0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" />
+
+            <!-- Question -->
+            <Label Content="Question:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,36,0,0" />
+            <TextBox Text="{Binding QuestionText}" Width="230" Margin="0,40,20,0" VerticalAlignment="Top" HorizontalAlignment="Right" Padding="0,2,0,2" IsReadOnly="True" />
+
+            <!-- Answer -->
+            <Label Content="Your Answer:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,86,0,0" />
+            <TextBox Text="{Binding UserAnswer}" Width="230" Margin="0,90,20,0" VerticalAlignment="Top" HorizontalAlignment="Right" ScrollViewer.CanContentScroll="True" Padding="0,2,0,2" />
+            
+            <!-- Submit -->
+            <Button Content="Submit" Command="{Binding SubmitCommand}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,140,20,0" Width="90" />
+        </Grid>
+        
+        <!-- Exit Button -->
+        <Button Content="Exit" Command="{Binding ExitCommand}" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,20,32,0" Width="90" />
     </Grid>
 </Window>
