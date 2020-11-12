@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommonClasses.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,16 @@ namespace CommonClasses
 
     /*********************** Changelog ************************/
     // [Unreleased]
+    // | [Added]
+    // | - Added a NUMBER_SCALE constant.
+    // | - Added an OperatorSymbol property.
+    // |
+    // | [Changed]
+    // | - Changed FirstNumber, SecondNumber, and Answer to conform to NUMBER_SCALE.
+    // | - Changed ToString() to display OperatorSymbol instead of the Operator name.
+    // |
+    // | [Removed]
+    // | - Removed MathOperator into it's own seperate class.
     // 
     // [0.1.0] 2020-10-30
     // | [Added]
@@ -30,17 +41,21 @@ namespace CommonClasses
     /// </summary>
     public class MathQuestion : IComparable<MathQuestion>
     {
-        public enum MathOperator { Plus, Minus, Times, Divide };
+        /// <summary>
+        /// The number of digits enforced after the decimal place.
+        /// </summary>
+        public const int NUMBER_SCALE = 2;
 
-        public double LeftOperand { get; private set; }
-        public double RightOperand { get; private set; }
-        public MathOperator Operator { get; private set; }
-        public double Answer { get; private set; }
+        public double LeftOperand { get; }
+        public double RightOperand { get; }
+        public MathOperator Operator { get; }
+        public string OperatorSymbol { get => Operator.GetDescription(); }
+        public double Answer { get; }
 
         public MathQuestion(double leftOperand, double rightOperand, MathOperator mathOperator)
         {
-            LeftOperand = leftOperand;
-            RightOperand = rightOperand;
+            LeftOperand = Math.Round(leftOperand, NUMBER_SCALE);
+            RightOperand = Math.Round(rightOperand, NUMBER_SCALE);
             Operator = mathOperator;
             Answer = CalculateAnswer();
         }
@@ -63,14 +78,14 @@ namespace CommonClasses
             switch (Operator)
             {
                 case MathOperator.Plus:
-                    return LeftOperand + RightOperand;
+                    return Math.Round(LeftOperand + RightOperand, NUMBER_SCALE);
                 case MathOperator.Minus:
-                    return LeftOperand - RightOperand;
+                    return Math.Round(LeftOperand - RightOperand, NUMBER_SCALE);
                 case MathOperator.Times:
-                    return LeftOperand * RightOperand;
+                    return Math.Round(LeftOperand * RightOperand, NUMBER_SCALE);
                 case MathOperator.Divide:
                     if (RightOperand == 0) return 0; // Cannot divide by 0
-                    return LeftOperand / RightOperand;
+                    return Math.Round(LeftOperand / RightOperand, NUMBER_SCALE);
                 default:
                     throw new NotImplementedException($"Unhandled value for {nameof(Operator)}: '{Operator}'");
             }
@@ -119,7 +134,7 @@ namespace CommonClasses
         /// <returns>The string representation.</returns>
         public override string ToString()
         {
-            return $"{Answer}({LeftOperand} {Operator} {RightOperand})";
+            return $"{Answer}({LeftOperand} {OperatorSymbol} {RightOperand})";
         }
     }
 }

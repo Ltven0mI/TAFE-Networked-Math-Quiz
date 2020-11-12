@@ -33,7 +33,7 @@ namespace CommonClasses.Networking
     {
         public double LeftOperand { get; private set; }
         public double RightOperand { get; private set; }
-        public MathQuestion.MathOperator Operator { get; private set; }
+        public MathOperator Operator { get; private set; }
 
 
         public QuestionPacket()
@@ -42,7 +42,7 @@ namespace CommonClasses.Networking
             RightOperand = default;
             Operator = default;
         }
-        public QuestionPacket(double leftOperand, double rightOperand, MathQuestion.MathOperator mathOperator)
+        public QuestionPacket(double leftOperand, double rightOperand, MathOperator mathOperator)
         {
             LeftOperand = leftOperand;
             RightOperand = rightOperand;
@@ -82,7 +82,7 @@ namespace CommonClasses.Networking
             // Deserialization //
             var leftOperand = BinarySerialize.DeserializeDouble(data, ref offset);
             var rightOperand = BinarySerialize.DeserializeDouble(data, ref offset);
-            var mathOperator = (MathQuestion.MathOperator)BinarySerialize.DeserializeInt(data, ref offset);
+            var mathOperator = (MathOperator)BinarySerialize.DeserializeInt(data, ref offset);
 
             // Assignment //
             LeftOperand = leftOperand;

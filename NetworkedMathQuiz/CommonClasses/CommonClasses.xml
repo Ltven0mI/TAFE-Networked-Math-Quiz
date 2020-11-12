@@ -10,12 +10,17 @@
             e.g. "10 * 4 = 40".
             </summary>
         </member>
+        <member name="F:CommonClasses.MathQuestion.NUMBER_SCALE">
+            <summary>
+            The number of digits enforced after the decimal place.
+            </summary>
+        </member>
         <member name="M:CommonClasses.MathQuestion.CalculateAnswer">
             <summary>
             Calculates the answer to this <see cref="T:CommonClasses.MathQuestion"/> instance.
             </summary>
             <returns>The calculated answer.</returns>
-            <exception cref="T:System.NotImplementedException">when an unknown <see cref="T:CommonClasses.MathQuestion.MathOperator"/> is used.</exception>
+            <exception cref="T:System.NotImplementedException">when an unknown <see cref="T:CommonClasses.MathOperator"/> is used.</exception>
         </member>
         <member name="M:CommonClasses.MathQuestion.CompareTo(CommonClasses.MathQuestion)">
             <summary>

@@ -7,18 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BinaryTree" Version="5.2.0" />
     <PackageReference Include="ENet-CSharp" Version="2.4.5" />
     <PackageReference Include="Unity" Version="5.11.7" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Services\Interfaces\" />
+    <ProjectReference Include="..\CommonClasses\CommonClasses.csproj" />
+    <ProjectReference Include="..\MVVMUtil\MVVMUtil.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CommonClasses\CommonClasses.csproj" />
-    <ProjectReference Include="..\MVVMUtil\MVVMUtil.csproj" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
