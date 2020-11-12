@@ -8,12 +8,15 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using TeacherApp.Models;
+using TeacherApp.Services.Interfaces;
 using TeacherApp.ViewModels.Interfaces;
 
 namespace TeacherApp.ViewModels
 {
     public class MainWindowVM : ViewModelBase, IViewMainWindowVM
     {
+        public const ushort NETWORKING_PORT = 62311;
+
         #region Properties
 
         #region Property - FirstNumber
@@ -107,6 +110,19 @@ namespace TeacherApp.ViewModels
         }
         #endregion Property - SearchText
 
+        #region Property - NetworkStatus
+        private string _networkStatus;
+        public string NetworkStatus
+        {
+            get => _networkStatus;
+            private set
+            {
+                _networkStatus = value;
+                RaisePropertyChanged(nameof(NetworkStatus));
+            }
+        }
+        #endregion Property - NetworkStatus
+
         #region Property - IsPendingAnswer
         private bool _isPendingAnswer;
         public bool IsPendingAnswer
@@ -116,9 +132,33 @@ namespace TeacherApp.ViewModels
             {
                 _isPendingAnswer = value;
                 RaisePropertyChanged(nameof(IsPendingAnswer));
+                UpdateCanSendQuestion();
             }
         }
         #endregion Property - IsPendingAnswer
+
+        #region Property - IsStudentConnected
+        private bool _isStudentConnected;
+        public bool IsStudentConnected
+        {
+            get => _isStudentConnected;
+            private set
+            {
+                _isStudentConnected = value;
+                RaisePropertyChanged(nameof(IsStudentConnected));
+                UpdateCanSendQuestion();
+            }
+        }
+        #endregion Property - IsStudentConnected
+
+        #region Property - CanSendQuestion
+        public bool CanSendQuestion { get; private set; }
+        private void UpdateCanSendQuestion()
+        {
+            CanSendQuestion = IsStudentConnected && !IsPendingAnswer;
+            RaisePropertyChanged(nameof(CanSendQuestion));
+        }
+        #endregion Property - CanSendQuestion
 
         #endregion Properties
 
@@ -136,7 +176,7 @@ namespace TeacherApp.ViewModels
                     },
                     _ =>
                     {
-                        return !IsPendingAnswer;
+                        return CanSendQuestion;
                     }
                 );
         }
@@ -168,6 +208,8 @@ namespace TeacherApp.ViewModels
                 new RelayCommand(
                     closable =>
                     {
+                        if (HostService.IsRunning)
+                            StopServer();
                         ((IClosable)closable).Close();
                     },
                     _ =>
@@ -289,6 +331,29 @@ namespace TeacherApp.ViewModels
         }
         #endregion Command - OrderSaveCommand
 
+        #region Command - HostCommand
+        private RelayCommand _hostCommand;
+        public ICommand HostCommand
+        {
+            get => _hostCommand ??=
+                new RelayCommand(
+                    _ => StartServer(),
+                    _ => !HostService.IsRunning
+                );
+        }
+        #endregion Command - HostCommand
+
+        #region Command - ShutdownCommand
+        private RelayCommand _shutdownCommand;
+        public ICommand ShutdownCommand
+        {
+            get => _shutdownCommand ??=
+                new RelayCommand(
+                    _ => StopServer(),
+                    _ => HostService.IsRunning
+                );
+        }
+        #endregion Command - ShutdownCommand
 
         #endregion Commands
 
@@ -309,11 +374,41 @@ namespace TeacherApp.ViewModels
         #endregion ViewModels
 
         #region Services
+
+        #region Service - HostService
+        [Unity.Dependency]
+        public IHostService HostService
+        {
+            get => _hostService;
+            set
+            {
+                // Deregister callbacks
+                if (_hostService != null)
+                {
+                    _hostService.ClientConnected -= HostService_ClientConnected;
+                    _hostService.ClientDisconnected -= HostService_ClientDisconnected;
+                    _hostService.ClientTimedout -= HostService_ClientTimedout;
+                }
+
+                _hostService = value;
+
+                // Register callbacks
+                if (_hostService != null)
+                {
+                    _hostService.ClientConnected += HostService_ClientConnected;
+                    _hostService.ClientDisconnected += HostService_ClientDisconnected;
+                    _hostService.ClientTimedout += HostService_ClientTimedout;
+                }
+            }
+        }
+        private IHostService _hostService;
+        #endregion Service - HostService
+
         #endregion Services
 
         public MainWindowVM()
         {
-
+            IsStudentConnected = false;
         }
 
         private void SendQuestion(MathQuestion question)
@@ -328,7 +423,74 @@ namespace TeacherApp.ViewModels
             IsPendingAnswer = true;
         }
 
+        private void StartServer()
+        {
+            // State Validation //
+            if (HostService.IsRunning)
+                throw new InvalidOperationException("Cannot start server when server is already running.");
+
+            NetworkStatus = "Awaiting connection";
+            IsStudentConnected = false;
+            HostService.Start(NETWORKING_PORT);
+        }
+
+        private void StopServer()
+        {
+            // State Validation //
+            if (!HostService.IsRunning)
+                throw new InvalidOperationException("Cannot stop server when server is not running.");
+
+            HostService.Shutdown();
+            NetworkStatus = "Host shutdown";
+            IsStudentConnected = false;
+        }
+
         #region Callback Methods
+
+
+        #region Source Group - HostService
+
+        private void HostService_ClientConnected(object sender, IHostService.ClientConnectionEventArgs e)
+        {
+            NetworkStatus = "Connected";
+            IsStudentConnected = true;
+        }
+        private void HostService_ClientDisconnected(object sender, IHostService.ClientConnectionEventArgs e)
+        {
+            NetworkStatus = "Awaiting connection";
+            IsStudentConnected = false;
+
+            // Student left... The question won't ever be answered now...
+            // Clean up in preperation for next student.
+            QuestionsModel.ActiveQuestion = null;
+            IsPendingAnswer = false;
+
+            // Clear input fields
+            FirstNumber = 0;
+            SelectedOperatorIndex = 0;
+            SecondNumber = 0;
+            AnswerString = "";
+        }
+        private void HostService_ClientTimedout(object sender, IHostService.ClientConnectionEventArgs e)
+        {
+            NetworkStatus = "Awaiting connection";
+            IsStudentConnected = false;
+
+            // Student left... The question won't ever be answered now...
+            // Clean up in preperation for next student.
+            QuestionsModel.ActiveQuestion = null;
+            IsPendingAnswer = false;
+
+            // Clear input fields
+            FirstNumber = 0;
+            SelectedOperatorIndex = 0;
+            SecondNumber = 0;
+            AnswerString = "";
+        }
+
+        #endregion Source Group - HostService
+
+
         #endregion Callback Methods
     }
 }

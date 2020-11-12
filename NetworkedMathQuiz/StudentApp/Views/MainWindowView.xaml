@@ -3,9 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:StudentApp.Views"
         mc:Ignorable="d"
         Title="Student" Height="420" Width="430" Background="#FFF0F0F0" ResizeMode="NoResize">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding ConnectCommand}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding DisconnectCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="66" />
@@ -27,17 +36,20 @@
 
             <!-- Question -->
             <Label Content="Question:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,36,0,0" />
-            <TextBox Text="{Binding QuestionText}" Width="230" Margin="0,40,20,0" VerticalAlignment="Top" HorizontalAlignment="Right" Padding="0,2,0,2" IsReadOnly="True" />
+            <TextBox Text="{Binding QuestionText}" IsEnabled="{Binding CanSubmitAnswer}" Width="230" Margin="0,40,20,0" VerticalAlignment="Top" HorizontalAlignment="Right" Padding="0,2,0,2" IsReadOnly="True" />
 
             <!-- Answer -->
             <Label Content="Your Answer:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,86,0,0" />
-            <TextBox Text="{Binding UserAnswer}" Width="230" Margin="0,90,20,0" VerticalAlignment="Top" HorizontalAlignment="Right" ScrollViewer.CanContentScroll="True" Padding="0,2,0,2" />
+            <TextBox Text="{Binding UserAnswer}" IsEnabled="{Binding CanSubmitAnswer}" Width="230" Margin="0,90,20,0" VerticalAlignment="Top" HorizontalAlignment="Right" ScrollViewer.CanContentScroll="True" Padding="0,2,0,2" />
+
+            <!-- Network Status -->
+            <Label Content="{Binding PeerService.ConnectionState, Mode=OneWay}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,144,120,0" Padding="0,0,0,0" FontSize="9" Foreground="#FF898989" />
             
             <!-- Submit -->
             <Button Content="Submit" Command="{Binding SubmitCommand}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,140,20,0" Width="90" />
         </Grid>
-        
+
         <!-- Exit Button -->
-        <Button Content="Exit" Command="{Binding ExitCommand}" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,20,32,0" Width="90" />
+        <Button Content="Exit" Command="{Binding ExitCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,20,32,0" Width="90" />
     </Grid>
 </Window>

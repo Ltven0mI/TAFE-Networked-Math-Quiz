@@ -1,4 +1,6 @@
-﻿using StudentApp.ViewModels;
+﻿using StudentApp.Services;
+using StudentApp.Services.Interfaces;
+using StudentApp.ViewModels;
 using StudentApp.ViewModels.Interfaces;
 using StudentApp.Views;
 using System;
@@ -28,6 +30,7 @@ namespace StudentApp
             var container = new UnityContainer();
 
             // Register Services
+            container.RegisterType<IPeerService, PeerService>();
 
             // Register ViewModels
             container.RegisterType<IViewMainWindowVM, MainWindowVM>();

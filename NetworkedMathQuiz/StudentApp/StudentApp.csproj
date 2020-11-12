@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="ENet-CSharp" Version="2.4.5" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
     <PackageReference Include="Unity" Version="5.11.7" />
   </ItemGroup>
 

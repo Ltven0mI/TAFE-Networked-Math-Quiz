@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using TeacherApp.Services;
+using TeacherApp.Services.Interfaces;
 using TeacherApp.ViewModels;
 using TeacherApp.ViewModels.Interfaces;
 using TeacherApp.Views;
@@ -28,6 +30,7 @@ namespace TeacherApp
             var container = new UnityContainer();
 
             // Register Services
+            container.RegisterType<IHostService, HostService>();
 
             // Register ViewModels
             container.RegisterType<IViewMainWindowVM, MainWindowVM>();
