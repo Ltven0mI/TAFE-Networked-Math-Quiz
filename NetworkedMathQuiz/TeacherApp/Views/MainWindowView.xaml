@@ -4,12 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TeacherApp"
+        xmlns:views="clr-namespace:TeacherApp.Views"
         xmlns:converters="clr-namespace:TeacherApp.Converters"
         xmlns:CommonClasses="clr-namespace:CommonClasses;assembly=CommonClasses"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:System="clr-namespace:System;assembly=System.Runtime" x:Class="TeacherApp.Views.MainWindowView"
+        xmlns:System="clr-namespace:System;assembly=System.Runtime"
+        x:Class="TeacherApp.Views.MainWindowView"
         mc:Ignorable="d"
         Title="Instructor" Height="560" Width="767" MinWidth="796" MinHeight="530" Background="#FFF0F0F0">
+    
+    <!-- Event Triggered Commands -->
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding HostCommand}" />
@@ -18,9 +22,11 @@
             <i:InvokeCommandAction Command="{Binding ShutdownCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
+    
     <Window.Resources>
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
@@ -43,65 +49,18 @@
             </Grid.ColumnDefinitions>
 
             <!-- Question Input Group -->
-            <Grid x:Name="QuestionInputGroup_Grid" Margin="0,0,0,0" VerticalAlignment="Top" Height="182" Width="306" HorizontalAlignment="Left">
-
-                <!-- Group Border -->
-                <Border x:Name="QuestionInputGroup_Border" BorderBrush="#FFE2E2E2" BorderThickness="1" Margin="0,12,0,40" />
-
-                <!-- Group Header -->
-                <Label x:Name="QuestionInputGroup_Label" Content="Enter question, then click SEND" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="4,0,4,0" VerticalContentAlignment="Center" Margin="8,0,0,0" Background="#FFF0F0F0"/>
-
-                <!-- Input Labels -->
-                <Label x:Name="FirstNumber_Label" Content="First Number:" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0,0,0,0" VerticalContentAlignment="Center" Margin="12,32,0,0"/>
-                <Label x:Name="Operator_Label" Content="Operator:" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0,0,0,0" VerticalContentAlignment="Center" Margin="12,59,0,0"/>
-                <Label x:Name="SecondNumber_Label" Content="Second Number:" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0,0,0,0" VerticalContentAlignment="Center" Margin="12,86,0,0"/>
-                <Label x:Name="Answer_Label" Content="Answer Number:" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0,0,0,0" VerticalContentAlignment="Center" Margin="12,113,0,0"/>
-
-                <!-- Input Fields -->
-                <TextBox x:Name="FirstNumber_TextBox" Text="{Binding FirstNumber}" IsEnabled="{Binding CanSendQuestion}" TextWrapping="Wrap" Width="110" Height="22" HorizontalAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="0,32,12,0" />
-                <ComboBox x:Name="Operator_ComboBox" SelectedIndex="{Binding SelectedOperatorIndex}" IsEnabled="{Binding CanSendQuestion}" Width="110" Height="22" HorizontalAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="0,59,12,0" >
-                    <System:String>+ (Plus)</System:String>
-                    <System:String>- (Minus)</System:String>
-                    <System:String>/ (Divide)</System:String>
-                    <System:String>* (Times)</System:String>
-                </ComboBox>
-                <TextBox x:Name="SecondNumber_TextBox" Text="{Binding SecondNumber}" IsEnabled="{Binding CanSendQuestion}" TextWrapping="Wrap" Width="110" Height="22" HorizontalAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="0,86,12,0"/>
-                <TextBox x:Name="Answer_TextBox" Text="{Binding AnswerString, Mode=OneWay}" IsEnabled="{Binding CanSendQuestion}" TextWrapping="Wrap" Width="110" Height="22" HorizontalAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="0,113,12,0" IsReadOnly="True" />
-
-                <!-- Network Status -->
-                <Label Content="{Binding NetworkStatus, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12,154,0,0" Padding="0,0,0,0" FontSize="9" Foreground="#FF898989" />
-
-                <!-- Send Button -->
-                <Button x:Name="Send_Button" Content="Send" Command="{Binding SendCommand}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="110" Margin="0,151,12,0" />
-            </Grid>
+            <views:QuestionInputView x:Name="QuestionInput"
+                                     DataContext="{Binding QuestionInputVM}"
+                                     Margin="0,0,0,0"
+                                     VerticalAlignment="Top"
+                                     HorizontalAlignment="Left"
+                                     Width="306"
+                                     Height="182"/>
 
             <!-- Asked Questions Group -->
-            <Grid Grid.Column="1">
-
-                <!-- Group Border -->
-                <Border BorderThickness="1" BorderBrush="#FFE5E5E5" Grid.Column="1" Margin="20,12,0,40" >
-                    <DataGrid x:Name="QuestionGroup_DataGrid" ItemsSource="{Binding QuestionsModel.AskedQuestions}" Margin="6,12,6,4" IsSynchronizedWithCurrentItem="True"/>
-                </Border>
-
-                <!-- Group Header -->
-                <Label x:Name="QuestionsGroup_Label" Content="Array of questions asked" Grid.Column="1" Background="#FFF0F0F0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="4,0,4,0" Margin="28,0,0,0" Height="20" VerticalContentAlignment="Center" />
-
-                <!-- Sort Button Group -->
-                <Grid x:Name="SortButtonGroup_Grid" Grid.Column="1" Height="20" Margin="26,0,6,10" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5*"/>
-                        <ColumnDefinition MaxWidth="40" />
-                        <ColumnDefinition Width="5*" />
-                        <ColumnDefinition MaxWidth="40" />
-                        <ColumnDefinition Width="5*" />
-                    </Grid.ColumnDefinitions>
-
-                    <!-- Sort Buttons -->
-                    <Button x:Name="BubbleSort_Button" Content="Bubble Sort (asc)" Command="{Binding SortCommand}" CommandParameter="{x:Static CommonClasses:SortingTypes.BubbleSort}" Grid.Column="0" />
-                    <Button x:Name="SelectionSort_Button" Content="Selection Sort (desc)" Command="{Binding SortCommand}" CommandParameter="{x:Static CommonClasses:SortingTypes.SelectionSort}" Grid.Column="2" />
-                    <Button x:Name="InsertionSort_Button" Content="Insertion Sort (asc)" Command="{Binding SortCommand}" CommandParameter="{x:Static CommonClasses:SortingTypes.InsertionSort}" Grid.Column="4" />
-                </Grid>
-            </Grid>
+            <views:QuestionTableView x:Name="QuestionTable"
+                                     DataContext="{Binding QuestionTableVM}"
+                                     Grid.Column="1"/>
         </Grid>
 
         <!-- LinkedList Group -->
@@ -131,68 +90,10 @@
             </Grid>
         </Grid>
 
-        <!-- BinaryTree Group -->
-        <Grid Grid.Row="3">
-            <!-- Group Border -->
-            <Border BorderThickness="1" BorderBrush="#FFE2E2E2" Margin="20,16,20,4" />
-
-            <!-- Group Header -->
-            <Label Content="Binary Tree (of all questions - added in the order asked)" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="2,0,2,0" Background="#FFF0F0F0" Margin="28,7,0,0" />
-
-            <!-- BinaryTree Textbox -->
-            <TextBox Text="{Binding BinaryTreeText, Mode=OneWay}" Margin="26,36,26,8" IsReadOnly="True" />
-
-            <!-- Button Group -->
-            <Grid HorizontalAlignment="Stretch" Margin="352,10,26,0" VerticalAlignment="Top" Height="20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*" />
-                    <ColumnDefinition MaxWidth="40" />
-                    <ColumnDefinition Width="5*" />
-                    <ColumnDefinition MaxWidth="40" />
-                    <ColumnDefinition Width="5*" />
-                </Grid.ColumnDefinitions>
-
-                <!-- Buttons -->
-                <TextBox Text="{Binding SearchText}" Grid.Column="2" />
-                <Button Content="Search" Command="{Binding SearchCommand}" Grid.Column="4" />
-            </Grid>
-        </Grid>
-
-        <!-- Order Button Group -->
-        <Border BorderThickness="1" BorderBrush="#FFE2E2E2" Grid.Row="4" Margin="20,7,20,14">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition MinWidth="65"/>
-                    <ColumnDefinition MinWidth="65"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition MinWidth="65"/>
-                    <ColumnDefinition MinWidth="65"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition MinWidth="65"/>
-                    <ColumnDefinition MinWidth="65"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Pre Order -->
-                <Border x:Name="PreOrderHeader_Border" Margin="8,12,8,44" Background="RoyalBlue" Grid.ColumnSpan="2">
-                    <TextBlock x:Name="PreOrderHeader_TextBlock" Text="Pre-Order" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                </Border>
-                <Button x:Name="PreOrderDisplay_Button" Content="Display" Command="{Binding OrderDisplayCommand}" CommandParameter="{x:Static CommonClasses:OrderTypes.PreOrder}" Margin="10,0,4,12" VerticalAlignment="Bottom" Height="20" Grid.Column="0"/>
-                <Button x:Name="PreOrderSave_Button" Content="Save" Command="{Binding OrderSaveCommand}" CommandParameter="{x:Static CommonClasses:OrderTypes.PreOrder}" Margin="4,0,10,12" VerticalAlignment="Bottom" Height="20" Grid.Column="1"/>
-
-                <!-- In Order -->
-                <Border x:Name="InOrderHeader_Border" Margin="8,12,8,44" Background="RoyalBlue" Grid.ColumnSpan="2" Grid.Column="3">
-                    <TextBlock x:Name="InOrderHeader_TextBlock" Text="In-Order" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                </Border>
-                <Button x:Name="InOrderDisplay_Button" Content="Display" Command="{Binding OrderDisplayCommand}" CommandParameter="{x:Static CommonClasses:OrderTypes.InOrder}" Margin="10,0,4,12" VerticalAlignment="Bottom" Height="20" Grid.Column="3"/>
-                <Button x:Name="InOrderSave_Button" Content="Save" Command="{Binding OrderSaveCommand}" CommandParameter="{x:Static CommonClasses:OrderTypes.InOrder}" Margin="4,0,10,12" VerticalAlignment="Bottom" Height="20" Grid.Column="4"/>
-
-                <!-- Post Order -->
-                <Border x:Name="PostOrderHeader_Border" Margin="8,12,8,44" Background="RoyalBlue" Grid.ColumnSpan="2" Grid.Column="6">
-                    <TextBlock x:Name="PostOrderHeader_TextBlock" Text="Post-Order" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                </Border>
-                <Button x:Name="PostOrderDisplay_Button" Content="Display" Command="{Binding OrderDisplayCommand}" CommandParameter="{x:Static CommonClasses:OrderTypes.PostOrder}" Margin="10,0,4,12" VerticalAlignment="Bottom" Height="20" Grid.Column="6"/>
-                <Button x:Name="PostOrderSave_Button" Content="Save" Command="{Binding OrderSaveCommand}" CommandParameter="{x:Static CommonClasses:OrderTypes.PostOrder}" Margin="4,0,10,12" VerticalAlignment="Bottom" Height="20" Grid.Column="7"/>
-            </Grid>
-        </Border>
+        <!-- Binary Tree Group -->
+        <views:BinaryTreeView x:Name="BinaryTree"
+                              DataContext="{Binding BinaryTreeVM}"
+                              Grid.Row="3"
+                              Grid.RowSpan="2" />
     </Grid>
 </Window>

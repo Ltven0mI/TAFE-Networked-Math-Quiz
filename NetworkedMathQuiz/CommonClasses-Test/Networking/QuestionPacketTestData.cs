@@ -14,9 +14,9 @@ namespace CommonClasses_Test.Networking
             public IEnumerator<object[]> GetEnumerator()
             {
                 yield return new object[]
-                    { 23.23, 11.11, MathQuestion.MathOperator.Plus };
+                    { 23.23, 11.11, MathOperator.Plus };
                 yield return new object[]
-                    { 23.11, 11.23, MathQuestion.MathOperator.Plus };
+                    { 23.11, 11.23, MathOperator.Plus };
             }
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
@@ -28,7 +28,7 @@ namespace CommonClasses_Test.Networking
             public IEnumerator<object[]> GetEnumerator()
             {
                 yield return new object[]
-                    { 23, 11, MathQuestion.MathOperator.Plus, new byte[]
+                    { 23, 11, MathOperator.Plus, new byte[]
                         {
                             0x53, 0x50, 0x4B,       // Header Token
                             0x00, 0x01, 0x00,       // Header Version
@@ -41,7 +41,7 @@ namespace CommonClasses_Test.Networking
                         }
                     };
                 yield return new object[]
-                    { 23.11, 20.16, MathQuestion.MathOperator.Times, new byte[]
+                    { 23.11, 20.16, MathOperator.Times, new byte[]
                         {
                             0x53, 0x50, 0x4B,       // Header Token
                             0x00, 0x01, 0x00,       // Header Version
@@ -75,7 +75,7 @@ namespace CommonClasses_Test.Networking
                             0x00, 0x00, 0x26, 0x40, // RightOP 2/2
                             0x00, 0x00, 0x00, 0x00, // Operator
                         },
-                        23, 11, MathQuestion.MathOperator.Plus
+                        23, 11, MathOperator.Plus
                     };
                 yield return new object[]
                     { new byte[]
@@ -89,7 +89,7 @@ namespace CommonClasses_Test.Networking
                             0xF5, 0x28, 0x34, 0x40, // RightOP 2/2
                             0x02, 0x00, 0x00, 0x00, // Operator
                         },
-                        23.11, 20.16, MathQuestion.MathOperator.Times
+                        23.11, 20.16, MathOperator.Times
                     };
             }
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

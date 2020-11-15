@@ -39,9 +39,16 @@
         <member name="M:CommonClasses.MathQuestion.ToString">
             <summary>
             Gets the string representation of this instance.<br/>
-            e.g. "40(10 * 4)".
+            e.g. "10 * 4 = 40".
             </summary>
             <returns>The string representation.</returns>
+        </member>
+        <member name="M:CommonClasses.MathQuestion.ToQuestionString">
+            <summary>
+            Gets the question representation of this instance.<br/>
+            e.g. "10 * 4 = ?".
+            </summary>
+            <returns>The question representation.</returns>
         </member>
         <member name="T:CommonClasses.Networking.AnswerPacket">
             <summary>

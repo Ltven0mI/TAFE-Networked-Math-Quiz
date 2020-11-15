@@ -36,7 +36,7 @@
 
             <!-- Question -->
             <Label Content="Question:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,36,0,0" />
-            <TextBox Text="{Binding QuestionText}" IsEnabled="{Binding CanSubmitAnswer}" Width="230" Margin="0,40,20,0" VerticalAlignment="Top" HorizontalAlignment="Right" Padding="0,2,0,2" IsReadOnly="True" />
+            <TextBox Text="{Binding QuestionText, Mode=OneWay}" IsEnabled="{Binding CanSubmitAnswer}" Width="230" Margin="0,40,20,0" VerticalAlignment="Top" HorizontalAlignment="Right" Padding="0,2,0,2" IsReadOnly="True" />
 
             <!-- Answer -->
             <Label Content="Your Answer:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,86,0,0" />

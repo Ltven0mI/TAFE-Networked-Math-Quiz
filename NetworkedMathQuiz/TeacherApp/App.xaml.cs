@@ -30,10 +30,15 @@ namespace TeacherApp
             var container = new UnityContainer();
 
             // Register Services
-            container.RegisterType<IHostService, HostService>();
+            container.RegisterType<IHostService, HostService>(TypeLifetime.Singleton);
+            container.RegisterType<IFileWriterService, FileWriterService>();
+            container.RegisterType<IMathQuestionRepositoryService, MathQuestionRepositoryService>(TypeLifetime.Singleton);
 
             // Register ViewModels
             container.RegisterType<IViewMainWindowVM, MainWindowVM>();
+            container.RegisterType<IViewQuestionInputVM, QuestionInputVM>();
+            container.RegisterType<IViewQuestionTableVM, QuestionTableVM>();
+            container.RegisterType<IViewBinaryTreeVM, BinaryTreeVM>();
 
             // Create MainView
             var view = container.Resolve<MainWindowView>();

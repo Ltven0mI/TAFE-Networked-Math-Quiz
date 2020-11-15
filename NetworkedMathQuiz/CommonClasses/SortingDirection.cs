@@ -4,5 +4,5 @@ using System.Text;
 
 namespace CommonClasses
 {
-    public enum SortingTypes { BubbleSort, SelectionSort, InsertionSort }
+    public enum SortingDirection { Ascending, Descending }
 }

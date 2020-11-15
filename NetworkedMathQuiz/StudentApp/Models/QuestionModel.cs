@@ -1,15 +1,13 @@
-﻿using BinaryTree;
-using CommonClasses;
+﻿using CommonClasses;
 using MVVMUtil;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
 
-namespace TeacherApp.Models
+namespace StudentApp.Models
 {
-    public class QuestionsModel : INotifyPropertyChanged
+    public class QuestionModel : INotifyPropertyChanged
     {
         #region Properties
 
@@ -26,43 +24,7 @@ namespace TeacherApp.Models
         }
         #endregion Property - ActiveQuestion
 
-        #region Property - AskedQuestions
-        private ObservableCollection<MathQuestion> _askedQuestions;
-        public ObservableCollection<MathQuestion> AskedQuestions
-        {
-            get => _askedQuestions ??=
-                new ObservableCollection<MathQuestion>();
-        }
-        #endregion Property - AskedQuestions
-
-        #region Property - QuestionsBinaryTree
-        private BinaryTree<MathQuestion> _questionsBinaryTree;
-        public BinaryTree<MathQuestion> QuestionsBinaryTree
-        {
-            get => _questionsBinaryTree ??=
-                new BinaryTree<MathQuestion>();
-        }
-        #endregion Property - QuestionsBinaryTree
-
-        #region Property - QuestionsDictionary
-        private Dictionary<string, MathQuestion> _questionsDictionary;
-        public Dictionary<string, MathQuestion> QuestionsDictionary
-        {
-            get => _questionsDictionary ??=
-                new Dictionary<string, MathQuestion>();
-        }
-        #endregion Property - QuestionsDictionary
-
         #endregion Properties
-
-
-        public void AddQuestion(MathQuestion mathQuestion)
-        {
-            AskedQuestions.Add(mathQuestion);
-            QuestionsBinaryTree.Add(mathQuestion);
-            QuestionsDictionary.Add(mathQuestion.ToString(), mathQuestion);
-        }
-
 
         #region INotifyPropertyChanged Members
 

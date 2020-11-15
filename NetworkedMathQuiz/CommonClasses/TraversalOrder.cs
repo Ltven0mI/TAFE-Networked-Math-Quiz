@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CommonClasses
 {
-    public enum OrderTypes
+    public enum TraversalOrder
     {
         [Description("PRE-ORDER")]
         PreOrder,

@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="TeacherApp.Views.QuestionTableView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:CommonClasses="clr-namespace:CommonClasses;assembly=CommonClasses"
+             xmlns:System="clr-namespace:System;assembly=System.Runtime"
+             xmlns:local="clr-namespace:TeacherApp.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="#FFF0F0F0">
+        <!-- Group Border -->
+        <Border BorderThickness="1" BorderBrush="#FFE5E5E5" Grid.Column="1" Margin="20,12,0,40" >
+            <DataGrid x:Name="QuestionGroup_DataGrid" ItemsSource="{Binding MathQuestionRepositoryService.AskedQuestions}" Margin="6,12,6,4" IsSynchronizedWithCurrentItem="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" IsReadOnly="True" SelectionUnit="Cell" RowDetailsVisibilityMode="Collapsed" HeadersVisibility="Column">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Number 1" Binding="{Binding LeftOperand, Mode=OneWay}" Width="10*" CanUserSort="False" CanUserReorder="False" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Math" Binding="{Binding OperatorSymbol, Mode=OneWay}" Width="5*" CanUserSort="False" CanUserReorder="False" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Number 2" Binding="{Binding RightOperand, Mode=OneWay}" Width="10*" CanUserSort="False" CanUserReorder="False" IsReadOnly="True" />
+                    <DataGridTemplateColumn Header="=" Width="2*" CanUserSort="False" CanUserReorder="False" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="="/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Answer" Binding="{Binding Answer, Mode=OneWay}" Width="10*" CanUserSort="False" CanUserReorder="False" IsReadOnly="True" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- Group Header -->
+        <Label x:Name="QuestionsGroup_Label" Content="Array of questions asked" Grid.Column="1" Background="#FFF0F0F0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="4,0,4,0" Margin="28,0,0,0" Height="20" VerticalContentAlignment="Center" />
+
+        <!-- Sort Button Group -->
+        <Grid x:Name="SortButtonGroup_Grid" Grid.Column="1" Height="20" Margin="26,0,6,10" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition MaxWidth="40" />
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition MaxWidth="40" />
+                <ColumnDefinition Width="5*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Sort Buttons -->
+            <Button x:Name="BubbleSort_Button" Content="Bubble Sort (asc)" Command="{Binding SortCommand}" Grid.Column="0">
+                <Button.CommandParameter>
+                    <x:Array Type="System:Object">
+                        <CommonClasses:SortingMethod>BubbleSort</CommonClasses:SortingMethod>
+                        <CommonClasses:SortingDirection>Ascending</CommonClasses:SortingDirection>
+                    </x:Array>
+                </Button.CommandParameter>
+            </Button>
+            <Button x:Name="SelectionSort_Button" Content="Selection Sort (desc)" Command="{Binding SortCommand}" Grid.Column="2">
+                <Button.CommandParameter>
+                    <x:Array Type="System:Object">
+                        <CommonClasses:SortingMethod>SelectionSort</CommonClasses:SortingMethod>
+                        <CommonClasses:SortingDirection>Descending</CommonClasses:SortingDirection>
+                    </x:Array>
+                </Button.CommandParameter>
+            </Button>
+            <Button x:Name="InsertionSort_Button" Content="Insertion Sort (asc)" Command="{Binding SortCommand}" Grid.Column="4">
+                <Button.CommandParameter>
+                    <x:Array Type="System:Object">
+                        <CommonClasses:SortingMethod>InsertionSort</CommonClasses:SortingMethod>
+                        <CommonClasses:SortingDirection>Ascending</CommonClasses:SortingDirection>
+                    </x:Array>
+                </Button.CommandParameter>
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

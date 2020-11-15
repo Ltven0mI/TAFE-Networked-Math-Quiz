@@ -20,6 +20,33 @@ namespace MVVMUtil
     /// </summary>
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
+        #region Properties
+        #endregion Properties
+
+
+        #region Commands
+        #endregion Commands
+
+
+        #region Services
+        #endregion Services
+
+
+        #region Models
+        #endregion Models
+
+
+        #region ViewModels
+        #endregion ViewModels
+
+
+        // Constructors //
+
+
+        #region Callbacks
+        #endregion Callbacks
+
+
         #region INotifyPropertyChanged Members
 
         public event PropertyChangedEventHandler PropertyChanged;

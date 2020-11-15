@@ -22,10 +22,12 @@ namespace CommonClasses
     // | [Added]
     // | - Added a NUMBER_SCALE constant.
     // | - Added an OperatorSymbol property.
+    // | - Added ToQuestionString() method.
     // |
     // | [Changed]
     // | - Changed FirstNumber, SecondNumber, and Answer to conform to NUMBER_SCALE.
     // | - Changed ToString() to display OperatorSymbol instead of the Operator name.
+    // | - Changed ToString() to use the format "4 * 10 = 40".
     // |
     // | [Removed]
     // | - Removed MathOperator into it's own seperate class.
@@ -123,18 +125,35 @@ namespace CommonClasses
         /**********************************************************/
         // Method:  public override string ToString()
         // Purpose: Gets the string representation of this instance.
-        //          - e.g. "40(10 * 4)".
+        //          - e.g. "10 * 4 = 40".
         // Returns: The string representation.
         // Outputs: string str
         /**********************************************************/
         /// <summary>
         /// Gets the string representation of this instance.<br/>
-        /// e.g. "40(10 * 4)".
+        /// e.g. "10 * 4 = 40".
         /// </summary>
         /// <returns>The string representation.</returns>
         public override string ToString()
         {
-            return $"{Answer}({LeftOperand} {OperatorSymbol} {RightOperand})";
+            return $"{LeftOperand} {OperatorSymbol} {RightOperand} = {Answer}";
+        }
+
+        /**********************************************************/
+        // Method:  public string ToQuestionString()
+        // Purpose: Gets the question representation of this instance.
+        //          - e.g. "10 * 4 = ?".
+        // Returns: The question representation.
+        // Outputs: string str
+        /**********************************************************/
+        /// <summary>
+        /// Gets the question representation of this instance.<br/>
+        /// e.g. "10 * 4 = ?".
+        /// </summary>
+        /// <returns>The question representation.</returns>
+        public string ToQuestionString()
+        {
+            return $"{LeftOperand} {OperatorSymbol} {RightOperand} = ?";
         }
     }
 }
